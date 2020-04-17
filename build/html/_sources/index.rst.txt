@@ -10,7 +10,7 @@ Welcome to Marker Detection Rectangle's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   MDR_src.rst
 
 Indices and tables
 ==================
