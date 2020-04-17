@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Marker Detection Rectangle's documentation!
-======================================================
+a Documentation of single Rectangle Marker Detection with Python
+======================================================================
 
 .. toctree::
    :maxdepth: 2
