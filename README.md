@@ -5,3 +5,5 @@ Marker Detection with python. Docs with sphinx
 
 사용하는 카메라: withrobot사의 oCam-1CGN-U-T
 필요 조건: 캘리브레이션 데이터(camera matrix, distortion coefficient)
+
+소스 코드 위치: source/MDR_src/rectangles_midpoint_harris_cam.py
