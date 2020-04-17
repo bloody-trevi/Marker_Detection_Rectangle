@@ -146,8 +146,328 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="class-and-functions">
-<h1>Class and Functions<a class="headerlink" href="#class-and-functions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-MDR_src">
+<span id="class-and-functions"></span><h1>Class and Functions<a class="headerlink" href="#module-MDR_src" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-MDR_src.rectangles_midpoint_harris_cam"></span><dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.adjust_gamma">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">adjust_gamma</code><span class="sig-paren">(</span><em>image</em>, <em>gamma=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.adjust_gamma" title="Permalink to this definition">¶</a></dt>
+<dd><p>이미지의 감마를 조정한다. build a lookup table mapping the pixel values [0, 255] to their adjusted gamma values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> – 조정할 이미지</li>
+<li><strong>gamma</strong> – 조정할 감마값</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">조정한 이미지</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.camCalib">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">camCalib</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.camCalib" title="Permalink to this definition">¶</a></dt>
+<dd><p>캘리브레이션 함수(사용 안함)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">내부 파라미터중 camera matrix, distortion coefficient vector</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.cam_params">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">cam_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.cam_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>카메라 내부 파라미터를 캘리브레이션 프로그램을 이용해 구한 값으로 설정한다.
+마커는 한 변이 187.0mm 인 정사각형으로 가정한다.
+또한 마커의 꼭짓점 저장 순서는
+1 2
+3 4
+로 저장된다.</p>
+<p>참고: <a class="reference external" href="https://darkpgmr.tistory.com/32">https://darkpgmr.tistory.com/32</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">마커 꼭짓점들의 실제 3D 좌표 벡터, camera matrix, distortion coefficient vector</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.check_midP">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">check_midP</code><span class="sig-paren">(</span><em>gray</em>, <em>start_x</em>, <em>start_y</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.check_midP" title="Permalink to this definition">¶</a></dt>
+<dd><ol class="arabic simple">
+<li>Harris corner detection을 이용해 이미지에서 꼭짓점을 찾는다.</li>
+<li>발견한 꼭짓점 중에서 사각형으로 인정된 4개의 점만 저장한다.</li>
+</ol>
+<dl class="docutils">
+<dt>사각형 인식 과정:</dt>
+<dd><ol class="first last arabic simple">
+<li>임의의 점을 첫 번째 꼭짓점으로 저장하고 거리가 가장 먼 꼭짓점을 두 번째 꼭짓점으로 저장한다.</li>
+<li>이 두 꼭짓점과 이루는 넓이가 가장 큰 꼭짓점을 세 번째 꼭짓점으로 저장한다.</li>
+<li>저장한 세 꼭짓점과 이루는 넓이가 가장 큰 꼭짓점을 네 번째 꼭짓점으로 저장한다.</li>
+<li>저장한 네 개의 꼭짓점들을 반환한다.</li>
+</ol>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gray</strong> – 그레이스케일 이미지</li>
+<li><strong>start_x</strong> – ROI의 시작점의 x값</li>
+<li><strong>start_y</strong> – ROI의 시작점의 y값</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">사각형의 네 꼭짓점의 좌표</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.find_contours">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">find_contours</code><span class="sig-paren">(</span><em>img</em>, <em>color</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.find_contours" title="Permalink to this definition">¶</a></dt>
+<dd><p>주어진 이미지에서 조건에 맞는 컨투어를 찾아낸다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> – 컨투어를 찾을 이미지</li>
+<li><strong>color</strong> – 찾은 컨투어를 표시할 BGR 이미지</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">찾은 컨투어중 볼록 사각형이고 정해진 범위내의 크기를 가지는 컨투어들</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.get_angle">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">get_angle</code><span class="sig-paren">(</span><em>markerPt</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.get_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>check_midP 함수로 정해진 마커의 꼭짓점들을 꼭짓점들의 중점과 각 점들의 각도를 이용해 점들을 정렬한다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>markerPt</strong> – check_midP로 정해진 마커의 꼭짓점들의 좌표 벡터</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">정렬된 꼭짓점들의 좌표 벡터, 꼭짓점들의 중점 좌표, 중점과 각 꼭짓점들의 각도 벡터</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.main">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">main</code><span class="sig-paren">(</span><em>object_points</em>, <em>cameraMtx</em>, <em>distCoff</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>이 시스템의 main loop, 다음 과정을 중단될때까지 반복한다.</p>
+<dl class="docutils">
+<dt>loop:</dt>
+<dd><ol class="first last arabic simple">
+<li>myCamCapture 클래스를 이용해 oCam에서 프레임을 읽어온다.</li>
+<li>읽어온 프레임의 밝기를 낮춘다.</li>
+<li><dl class="first docutils">
+<dt>프레임에서 firstContour 함수를 이용해 조건에 맞는 사각형을 찾는다.</dt>
+<dd>3-1. 찾은 사각형이 2개 이상이면 다음 프레임을 읽어온다.</dd>
+</dl>
+</li>
+<li>찾은 사각형의 대각선의 교점이 일치하면 마커로 인정한다.</li>
+<li>마커의 꼭짓점들을 시계 방향으로 정렬한 후, 중점과 함께 꼭짓점들을 표시한다.</li>
+<li>solvePnP 함수를 이용해 마커의 실제 좌표를 구한다.</li>
+</ol>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>object_points</strong> – 마커의 실제 크기를 반영한 3D 좌표계에서의 꼭짓점 좌표 벡터</li>
+<li><strong>cameraMtx</strong> – 카메라 내부 파라미터, camera matrix</li>
+<li><strong>distCoff</strong> – distortion coefficient</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">없음</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture">
+<em class="property">class </em><code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">myCamCapture</code><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture" title="Permalink to this definition">¶</a></dt>
+<dd><p>oCam 1CGN-U-T 카메라를 열어 영상을 불러오는 클래스.</p>
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamClose">
+<code class="descname">CamClose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamClose" title="Permalink to this definition">¶</a></dt>
+<dd><p>열었던 카메라를 닫는다. 닫은 카메라는 None으로 초기화한다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">열려 있는 카메라가 없으면 None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetCtrl">
+<code class="descname">CamGetCtrl</code><span class="sig-paren">(</span><em>ctrl</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetCtrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>카메라 설정을 읽어 온다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ctrl</strong> – 컨트롤</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetDeviceInfo">
+<code class="descname">CamGetDeviceInfo</code><span class="sig-paren">(</span><em>devno</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetDeviceInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>디바이스 번호에 해당하는 디바이스의 정보를 출력한다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>devno</strong> – 디바이스 번호</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">USB 포트 위치, 시리얼 번호, 제품 이름, 펌웨어 버전을 반환</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetDeviceList">
+<code class="descname">CamGetDeviceList</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetDeviceList" title="Permalink to this definition">¶</a></dt>
+<dd><p>디바이스 번호를 이용해 얻은 정보들을 리스트에 저장해 반환한다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">디바이스들의 리스트를 반환</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetImage">
+<code class="descname">CamGetImage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamGetImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>열려 있는 카메라에서 이미지를 받는다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">열려 있는 카메라가 없으면 None. 이미지를 받았다면 (True, 받은 이미지), 읽지 못했다면 (False, None)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamStart">
+<code class="descname">CamStart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamStart" title="Permalink to this definition">¶</a></dt>
+<dd><p>카메라가 영상을 받을 수 있게 준비한다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">열려 있는 카메라가 없으면 None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamStop">
+<code class="descname">CamStop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.CamStop" title="Permalink to this definition">¶</a></dt>
+<dd><p>카메라를 정지 시킨다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">열려 있는 카메라가 없으면 None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.GetConnectedCamNumber">
+<code class="descname">GetConnectedCamNumber</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.GetConnectedCamNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>연결된 캠의 번호를 반환한다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">연결된 캠의 번호를 int로 반환</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.myCamCapture.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.myCamCapture.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="MDR_src.rectangles_midpoint_harris_cam.setROI">
+<code class="descclassname">MDR_src.rectangles_midpoint_harris_cam.</code><code class="descname">setROI</code><span class="sig-paren">(</span><em>img</em>, <em>contours</em><span class="sig-paren">)</span><a class="headerlink" href="#MDR_src.rectangles_midpoint_harris_cam.setROI" title="Permalink to this definition">¶</a></dt>
+<dd><p>ROI(Region of Interest)를 설정해준다.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> – 원본 이미지</li>
+<li><strong>contours</strong> – ROI를 선택할 기준 좌표들</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">잘라낸 이미지와 그 이미지의 왼쪽 위의 좌표</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 

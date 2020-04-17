@@ -6,6 +6,6 @@ Class and Functions
     :undoc-members:
     :show-inheritance:
 
-    .. automodule:: MDR_src.rectangle_midpoint_harris_cam
+    .. automodule:: MDR_src.rectangles_midpoint_harris_cam
         :members:
         :special-members:
