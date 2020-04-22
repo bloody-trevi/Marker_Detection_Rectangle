@@ -225,12 +225,11 @@ def check_midP(gray, start_x, start_y):
     corners = cv2.cornerSubPix(gray, np.float32(centroids), (5, 5), (-1, -1), criteria)
 
     # 
-    '''
-        res에는 발견한 점들이 [y,x,y,x] 행이 여러 개 있다
-        앞의 두 x,y는 내부 코너,
-        뒤의 두 x,y는 외부 코너임
-        Z 모양 순서로 저장되어 있음
-    '''
+
+    #   res에는 발견한 점들이 [y,x,y,x] 행이 여러 개 있다
+    #   앞의 두 x,y는 내부 코너,
+    #   뒤의 두 x,y는 외부 코너임
+    #   Z 모양 순서로 저장되어 있음
     res = np.hstack((centroids, corners))
     res = np.int0(res)
 
@@ -335,7 +334,7 @@ def find_contours(img, color):
     kernel = np.ones((4, 4), np.uint8)
     binary = cv2.morphologyEx(binary, cv2.MORPH_OPEN, kernel)
 
-    _, contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     cv2.drawContours(color, contours, -1, (0, 255, 0), 1)
     try:
@@ -522,6 +521,8 @@ def main(object_points, cameraMtx, distCoff):
         cap.CamSetCtrl(myCamCapture.CTRL_GAIN, 255)
         count = 0
 
+        data = np.array([[0, 0, 0]])
+
         while (True):
             try:
                 ret, frame = cap.CamGetImage()  # frame: Gray
@@ -580,12 +581,15 @@ def main(object_points, cameraMtx, distCoff):
                     # Find the location of the marker
                     # try:
                     retP, rvec, tvec = cv2.solvePnP(object_points, markerPt2, cameraMtx, distCoff)
+                    tvec_save = np.array([[tvec[0][0], tvec[1][0], tvec[2][0]]])
+                    data = np.append(data, tvec_save, axis=0)
                     mat, _ = cv2.Rodrigues(rvec)
                     # mat = np.matrix(mat)
                     # tv = -mat.I * tvec
 
                     # except:
                     #    break
+                    # 위치 표시
                     text = 'Location: [' + str(int(tvec[0][0])) + ', ' + str(int(tvec[1][0])) + ', ' + str(
                         int(tvec[2][0])) + ']'
                     color = cv2.putText(color, text, (20, 20), cv2.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 2)
@@ -596,6 +600,8 @@ def main(object_points, cameraMtx, distCoff):
             if key == 27:  # Quit with ESC
                 break
 
+        # saving the locations
+        np.save('data', data)
         end_time = time.time()
 
         print('FPS= ', count / (end_time - start_time))
